@@ -93,8 +93,8 @@ function AdminPage() {
       toast.success("Status updated successfully.");
       queryClient.invalidateQueries({ queryKey: ["admin-complaints"] });
     },
-    onError: (error: any) => {
-      toast.error("Failed to update status: " + error.message);
+    onError: (error: unknown) => {
+      toast.error("Failed to update status: " + (error instanceof Error ? error.message : "Unknown error"));
     },
   });
 
@@ -172,9 +172,9 @@ function AdminPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-[120px]">Grievance ID</TableHead>
+                      <TableHead className="w-30">Grievance ID</TableHead>
                       <TableHead>Date</TableHead>
-                      <TableHead className="w-[300px]">Title</TableHead>
+                      <TableHead className="w-75">Title</TableHead>
                       <TableHead>Location</TableHead>
                       <TableHead>Current Status</TableHead>
                       <TableHead className="text-right">Action</TableHead>
@@ -187,10 +187,10 @@ function AdminPage() {
                         <TableCell className="whitespace-nowrap">
                           {format(new Date(complaint.created_at), "MMM d, yyyy")}
                         </TableCell>
-                        <TableCell className="max-w-[300px] truncate" title={complaint.title}>
+                        <TableCell className="max-w-75 truncate" title={complaint.title}>
                           {complaint.title}
                         </TableCell>
-                        <TableCell className="truncate max-w-[200px]">
+                        <TableCell className="truncate max-w-50">
                           {[complaint.city, complaint.district, complaint.state]
                             .filter(Boolean)
                             .filter((v) => v !== "Not Specified")
@@ -209,7 +209,7 @@ function AdminPage() {
                             }
                             disabled={updateStatus.isPending}
                           >
-                            <SelectTrigger className="w-[160px] h-8 text-xs ml-auto">
+                            <SelectTrigger className="w-40 h-8 text-xs ml-auto">
                               <SelectValue placeholder="Update Status" />
                             </SelectTrigger>
                             <SelectContent align="end">

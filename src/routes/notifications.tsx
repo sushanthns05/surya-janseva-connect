@@ -20,7 +20,7 @@ export const Route = createFileRoute("/notifications")({
 });
 
 function NotificationsPage() {
-  const { user, isAuthLoading } = useAuth();
+  const { user, loading: isAuthLoading } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -54,7 +54,7 @@ function NotificationsPage() {
       queryClient.invalidateQueries({ queryKey: ["notifications", "unread"] });
     },
     onError: (error: unknown) => {
-      toast.error("Failed to mark as read: " + error.message);
+      toast.error("Failed to mark as read: " + (error instanceof Error ? error.message : "Unknown error"));
     },
   });
 
