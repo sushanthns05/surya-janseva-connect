@@ -44,6 +44,8 @@ function NotificationsPage() {
     },
   });
 
+  type NewType = unknown;
+
   const markAsRead = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("notifications").update({ is_read: true }).eq("id", id);
@@ -53,7 +55,7 @@ function NotificationsPage() {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       queryClient.invalidateQueries({ queryKey: ["notifications", "unread"] });
     },
-    onError: (error: unknown) => {
+    onError: (error: NewType) => {
       toast.error("Failed to mark as read: " + (error instanceof Error ? error.message : "Unknown error"));
     },
   });

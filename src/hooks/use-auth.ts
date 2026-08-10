@@ -34,10 +34,10 @@ export function useRoles(user: User | null) {
     queryKey: ["roles", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      if (user?.email === 'sushanthns05@gmail.com') {
+      if (user?.email === "sushanthns05@gmail.com") {
         return ["super_admin"] as AppRole[];
       }
-      
+
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")
@@ -73,9 +73,9 @@ export function useAuth() {
     user,
     loading: loading || (!!user && roles.isLoading),
     roles: roleList,
-    isStaff: user?.email === 'sushanthns05@gmail.com' || roleList.some((r) => r !== "citizen"),
-    isSuperAdmin: user?.email === 'sushanthns05@gmail.com' || roleList.includes("super_admin"),
-    hasRole: (role: AppRole) => user?.email === 'sushanthns05@gmail.com' || roleList.includes(role),
+    isStaff: user?.email === "sushanthns05@gmail.com" || roleList.some((r) => r !== "citizen"),
+    isSuperAdmin: user?.email === "sushanthns05@gmail.com" || roleList.includes("super_admin"),
+    hasRole: (role: AppRole) => user?.email === "sushanthns05@gmail.com" || roleList.includes(role),
   };
 }
 
