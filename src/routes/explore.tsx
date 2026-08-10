@@ -59,7 +59,10 @@ function ExplorePage() {
 
   const formatStatus = (status: string | null) => {
     if (!status) return "Unknown";
-    return status.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    return status
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
   return (
@@ -72,7 +75,7 @@ function ExplorePage() {
               Discover and monitor public civic issues reported across India.
             </p>
           </div>
-          
+
           <div className="relative w-full md:w-80">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -98,31 +101,34 @@ function ExplorePage() {
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {complaints?.map((complaint) => (
-              <Card key={complaint.id} className="flex flex-col shadow-card hover:shadow-lift transition-shadow">
+              <Card
+                key={complaint.id}
+                className="flex flex-col shadow-card hover:shadow-lift transition-shadow"
+              >
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between gap-4">
                     <Badge variant="secondary" className={getStatusColor(complaint.status)}>
                       {formatStatus(complaint.status)}
                     </Badge>
                     <span className="text-xs font-medium text-muted-foreground shrink-0">
-                      {complaint.created_at ? format(new Date(complaint.created_at), "MMM d, yyyy") : ""}
+                      {complaint.created_at
+                        ? format(new Date(complaint.created_at), "MMM d, yyyy")
+                        : ""}
                     </span>
                   </div>
-                  <CardTitle className="mt-4 line-clamp-2 text-lg">
-                    {complaint.title}
-                  </CardTitle>
+                  <CardTitle className="mt-4 line-clamp-2 text-lg">{complaint.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 pb-6">
                   <p className="line-clamp-3 text-sm text-muted-foreground">
                     {complaint.summary || "No description provided."}
                   </p>
-                  
+
                   <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
                     <MapPin className="h-4 w-4 shrink-0" />
                     <span className="line-clamp-1">
                       {[complaint.locality, complaint.city, complaint.district, complaint.state]
                         .filter(Boolean)
-                        .filter(v => v !== "Not Specified")
+                        .filter((v) => v !== "Not Specified")
                         .join(", ") || "Location not specified"}
                     </span>
                   </div>

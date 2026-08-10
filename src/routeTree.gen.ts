@@ -10,9 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as SuggestRouteImport } from './routes/suggest'
 import { Route as TrackRouteImport } from './routes/track'
@@ -22,9 +25,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -35,6 +48,11 @@ const ExploreRoute = ExploreRouteImport.update({
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportRoute = ReportRouteImport.update({
@@ -55,18 +73,24 @@ const TrackRoute = TrackRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
   '/suggest': typeof SuggestRoute
   '/track': typeof TrackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
   '/suggest': typeof SuggestRoute
   '/track': typeof TrackRoute
@@ -74,9 +98,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
   '/suggest': typeof SuggestRoute
   '/track': typeof TrackRoute
@@ -85,27 +112,36 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/auth'
+    | '/dashboard'
     | '/explore'
     | '/how-it-works'
+    | '/notifications'
     | '/report'
     | '/suggest'
     | '/track'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/auth'
+    | '/dashboard'
     | '/explore'
     | '/how-it-works'
+    | '/notifications'
     | '/report'
     | '/suggest'
     | '/track'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/auth'
+    | '/dashboard'
     | '/explore'
     | '/how-it-works'
+    | '/notifications'
     | '/report'
     | '/suggest'
     | '/track'
@@ -113,9 +149,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
+  DashboardRoute: typeof DashboardRoute
   ExploreRoute: typeof ExploreRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  NotificationsRoute: typeof NotificationsRoute
   ReportRoute: typeof ReportRoute
   SuggestRoute: typeof SuggestRoute
   TrackRoute: typeof TrackRoute
@@ -130,11 +169,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -149,6 +202,13 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/report': {
@@ -177,9 +237,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
+  DashboardRoute: DashboardRoute,
   ExploreRoute: ExploreRoute,
   HowItWorksRoute: HowItWorksRoute,
+  NotificationsRoute: NotificationsRoute,
   ReportRoute: ReportRoute,
   SuggestRoute: SuggestRoute,
   TrackRoute: TrackRoute,
