@@ -191,7 +191,7 @@ function AdminPage() {
                           {complaint.title}
                         </TableCell>
                         <TableCell className="truncate max-w-50">
-                          {[complaint.city, complaint.district, complaint.state]
+                          {[complaint.address, complaint.city, complaint.district, complaint.state]
                             .filter(Boolean)
                             .filter((v) => v !== "Not Specified")
                             .join(", ") || "Unknown"}
