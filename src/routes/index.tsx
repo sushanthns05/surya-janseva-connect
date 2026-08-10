@@ -120,33 +120,33 @@ function LandingPage() {
   return (
     <AppShell>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-hero">
+      <section className="relative overflow-hidden bg-background">
         <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1.05fr_1fr] lg:items-center">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground/85">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               {t("brand.short")}
             </span>
-            <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] text-primary-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] text-foreground sm:text-5xl lg:text-6xl">
               {t("hero.title")}
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-primary-foreground/80 sm:text-lg">
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               {t("hero.subtitle")}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button size="lg" variant="accent" asChild>
+              <Button size="lg" asChild>
                 <Link to="/report">{t("cta.report")}</Link>
               </Button>
-              <Button size="lg" variant="onDark" asChild>
+              <Button size="lg" variant="outline" asChild>
                 <Link to="/track">{t("cta.track")}</Link>
               </Button>
-              <Button size="lg" variant="ghostOnDark" asChild>
+              <Button size="lg" variant="ghost" asChild>
                 <Link to="/explore">{t("cta.explore")}</Link>
               </Button>
-              <Button size="lg" variant="ghostOnDark" asChild>
+              <Button size="lg" variant="ghost" asChild>
                 <Link to="/how-it-works">{t("cta.how")}</Link>
               </Button>
             </div>
-            <p className="mt-8 max-w-xl text-xs leading-relaxed text-primary-foreground/60">
+            <p className="mt-8 max-w-xl text-xs leading-relaxed text-muted-foreground/80">
               {t("hero.disclaimer")}
             </p>
           </div>
