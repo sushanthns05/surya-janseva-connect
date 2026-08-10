@@ -72,7 +72,16 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   circleEllipsis: CircleEllipsis,
 };
 
-function StatCard({ label, value, loading }: { label: string; value?: number; loading: boolean }) {
+function StatCard({
+  label,
+  value,
+  loading,
+}: {
+  label: string;
+  value: number | undefined;
+  loading: boolean;
+}) {
+
   return (
     <div className="rounded-lg border border-border bg-card p-5 shadow-card">
       {loading ? (
