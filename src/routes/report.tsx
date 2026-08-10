@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 const reportSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -41,6 +42,19 @@ function ReportPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const { data: categories, isLoading: loadingCategories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("complaint_categories")
+        .select("id, name")
+        .eq("is_active", true)
+        .order("sort_order");
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const {
     register,
@@ -113,14 +127,14 @@ function ReportPage() {
               <Label>Category</Label>
               <Select onValueChange={(value) => setValue("categoryId", value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
+                  <SelectValue placeholder={loadingCategories ? "Loading categories..." : "Select a category"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="roads">Roads & Infrastructure</SelectItem>
-                  <SelectItem value="water">Water & Sanitation</SelectItem>
-                  <SelectItem value="electricity">Electricity & Power</SelectItem>
-                  <SelectItem value="waste">Waste Management</SelectItem>
-                  <SelectItem value="transport">Public Transport</SelectItem>
+                  {categories?.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               {errors.categoryId && (
