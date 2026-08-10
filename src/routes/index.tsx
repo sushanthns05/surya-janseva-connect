@@ -258,7 +258,6 @@ function LandingPage() {
                   <Link
                     key={category.id}
                     to="/explore"
-                    search={{ category: category.slug }}
                     className="group rounded-lg border border-border bg-card p-4 transition-all hover:border-accent hover:shadow-card"
                   >
                     <Icon className="size-5 text-accent" />
