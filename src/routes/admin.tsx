@@ -81,7 +81,7 @@ function AdminPage() {
       const { error } = await supabase
         .from("complaints")
         .update({
-          status: status as any,
+          status: status as unknown,
           ...(status === "resolved" || status === "closed"
             ? { resolved_at: new Date().toISOString() }
             : {}),
@@ -94,7 +94,9 @@ function AdminPage() {
       queryClient.invalidateQueries({ queryKey: ["admin-complaints"] });
     },
     onError: (error: unknown) => {
-      toast.error("Failed to update status: " + (error instanceof Error ? error.message : "Unknown error"));
+      toast.error(
+        "Failed to update status: " + (error instanceof Error ? error.message : "Unknown error"),
+      );
     },
   });
 

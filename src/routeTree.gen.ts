@@ -17,7 +17,7 @@ import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ReportRouteImport } from './routes/report'
-import { Route as SuggestRouteImport } from './routes/suggest'
+import { Route as SuggestionsRouteImport } from './routes/suggestions'
 import { Route as TrackRouteImport } from './routes/track'
 
 const IndexRoute = IndexRouteImport.update({
@@ -60,9 +60,9 @@ const ReportRoute = ReportRouteImport.update({
   path: '/report',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SuggestRoute = SuggestRouteImport.update({
-  id: '/suggest',
-  path: '/suggest',
+const SuggestionsRoute = SuggestionsRouteImport.update({
+  id: '/suggestions',
+  path: '/suggestions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrackRoute = TrackRouteImport.update({
@@ -80,7 +80,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
-  '/suggest': typeof SuggestRoute
+  '/suggestions': typeof SuggestionsRoute
   '/track': typeof TrackRoute
 }
 export interface FileRoutesByTo {
@@ -92,7 +92,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
-  '/suggest': typeof SuggestRoute
+  '/suggestions': typeof SuggestionsRoute
   '/track': typeof TrackRoute
 }
 export interface FileRoutesById {
@@ -105,7 +105,7 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/notifications': typeof NotificationsRoute
   '/report': typeof ReportRoute
-  '/suggest': typeof SuggestRoute
+  '/suggestions': typeof SuggestionsRoute
   '/track': typeof TrackRoute
 }
 export interface FileRouteTypes {
@@ -119,7 +119,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/notifications'
     | '/report'
-    | '/suggest'
+    | '/suggestions'
     | '/track'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -131,7 +131,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/notifications'
     | '/report'
-    | '/suggest'
+    | '/suggestions'
     | '/track'
   id:
     | '__root__'
@@ -143,7 +143,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/notifications'
     | '/report'
-    | '/suggest'
+    | '/suggestions'
     | '/track'
   fileRoutesById: FileRoutesById
 }
@@ -156,7 +156,7 @@ export interface RootRouteChildren {
   HowItWorksRoute: typeof HowItWorksRoute
   NotificationsRoute: typeof NotificationsRoute
   ReportRoute: typeof ReportRoute
-  SuggestRoute: typeof SuggestRoute
+  SuggestionsRoute: typeof SuggestionsRoute
   TrackRoute: typeof TrackRoute
 }
 
@@ -218,11 +218,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/suggest': {
-      id: '/suggest'
-      path: '/suggest'
-      fullPath: '/suggest'
-      preLoaderRoute: typeof SuggestRouteImport
+    '/suggestions': {
+      id: '/suggestions'
+      path: '/suggestions'
+      fullPath: '/suggestions'
+      preLoaderRoute: typeof SuggestionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/track': {
@@ -244,7 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   HowItWorksRoute: HowItWorksRoute,
   NotificationsRoute: NotificationsRoute,
   ReportRoute: ReportRoute,
-  SuggestRoute: SuggestRoute,
+  SuggestionsRoute: SuggestionsRoute,
   TrackRoute: TrackRoute,
 }
 export const routeTree = rootRouteImport
