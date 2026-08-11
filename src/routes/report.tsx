@@ -95,7 +95,7 @@ function ReportPage() {
       toast.success(`Complaint submitted successfully! Your tracking ID is ${trackingId}`);
       navigate({ to: "/track" });
     } catch (error: unknown) {
-      toast.error(error.message || "Failed to submit report");
+      toast.error(error instanceof Error ? error.message : "Failed to submit report");
     } finally {
       setLoading(false);
     }

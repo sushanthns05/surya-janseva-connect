@@ -81,7 +81,7 @@ function AdminPage() {
       const { error } = await supabase
         .from("complaints")
         .update({
-          status: status as unknown,
+          status: status as Database["public"]["Enums"]["complaint_status"],
           ...(status === "resolved" || status === "closed"
             ? { resolved_at: new Date().toISOString() }
             : {}),
