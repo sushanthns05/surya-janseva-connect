@@ -5,6 +5,7 @@ import { ShieldCheck, Loader2, Search, ArrowUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import type { Database } from "@/integrations/supabase/types";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -81,7 +82,7 @@ function AdminPage() {
       const { error } = await supabase
         .from("complaints")
         .update({
-          status: status as unknown,
+          status: status as Database["public"]["Enums"]["complaint_status"],
           ...(status === "resolved" || status === "closed"
             ? { resolved_at: new Date().toISOString() }
             : {}),
