@@ -21,8 +21,22 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 
 const authSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
+  fullName: z.string().trim().max(100, { message: "Name must be less than 100 characters" }).optional(),
+  mobile: z.string().trim().optional(),
+  email: z.string().trim().email({ message: "Please enter a valid email address" }).max(255),
   password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+});
+
+const registerSchema = authSchema.extend({
+  fullName: z
+    .string()
+    .trim()
+    .nonempty({ message: "Please enter your full name" })
+    .max(100, { message: "Name must be less than 100 characters" }),
+  mobile: z
+    .string()
+    .trim()
+    .regex(/^[6-9]\d{9}$/, { message: "Enter a valid 10-digit mobile number" }),
 });
 
 type AuthFormValues = z.infer<typeof authSchema>;
@@ -45,10 +59,11 @@ function AuthPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<AuthFormValues>({
-    resolver: zodResolver(authSchema),
-    defaultValues: { email: "", password: "" },
+    resolver: zodResolver(isLogin ? authSchema : registerSchema),
+    defaultValues: { fullName: "", mobile: "", email: "", password: "" },
   });
 
   const onSubmit = async (data: AuthFormValues) => {
@@ -66,6 +81,13 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email: data.email,
           password: data.password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: {
+              full_name: data.fullName ?? "",
+              mobile: data.mobile ?? "",
+            },
+          },
         });
         if (error) throw error;
         toast.success("Account created! Please check your email to verify.");
@@ -90,13 +112,38 @@ function AuthPage() {
             <CardDescription>
               {isLogin
                 ? "Enter your email and password to access your account."
-                : "Enter your email and password to create a new account."}
+                : "Fill in your details to create a new account."}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {!isLogin && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName">Full name</Label>
+                    <Input id="fullName" placeholder="Ravi Kumar" {...register("fullName")} />
+                    {errors.fullName && (
+                      <p className="text-sm text-destructive">{errors.fullName.message}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="mobile">Mobile number</Label>
+                    <Input
+                      id="mobile"
+                      type="tel"
+                      inputMode="numeric"
+                      maxLength={10}
+                      placeholder="9876543210"
+                      {...register("mobile")}
+                    />
+                    {errors.mobile && (
+                      <p className="text-sm text-destructive">{errors.mobile.message}</p>
+                    )}
+                  </div>
+                </>
+              )}
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Email address</Label>
                 <Input
                   id="email"
                   type="email"
@@ -129,7 +176,10 @@ function AuthPage() {
               <button
                 type="button"
                 className="text-primary hover:underline font-medium cursor-pointer"
-                onClick={() => setIsLogin(!isLogin)}
+                onClick={() => {
+                  setIsLogin(!isLogin);
+                  reset({ fullName: "", mobile: "", email: "", password: "" });
+                }}
               >
                 {isLogin ? "Register" : "Sign In"}
               </button>
