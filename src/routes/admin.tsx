@@ -5,6 +5,7 @@ import { ShieldCheck, Loader2, Search, ArrowUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import type { Database } from "@/integrations/supabase/types";
 import { AppShell } from "@/components/layout/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
