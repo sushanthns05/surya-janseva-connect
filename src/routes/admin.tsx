@@ -27,6 +27,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
+import { sendStatusUpdateEmail } from "@/server/email";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -78,8 +79,20 @@ function AdminPage() {
   });
 
   const updateStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase
+    mutationFn: async ({
+      id,
+      status,
+      citizen_id,
+      grievance_id,
+      title,
+    }: {
+      id: string;
+      status: string;
+      citizen_id: string;
+      grievance_id: string;
+      title: string;
+    }) => {
+      const { data, error } = await supabase
         .from("complaints")
         .update({
           status: status as Database["public"]["Enums"]["complaint_status"],
@@ -89,10 +102,22 @@ function AdminPage() {
         })
         .eq("id", id)
         .select();
-      
+
       if (error) throw error;
       if (!data || data.length === 0) {
         throw new Error("Update failed. You may not have permission to perform this action.");
+      }
+
+      // Try sending email notification
+      try {
+        const emailRes = await sendStatusUpdateEmail({
+          data: { citizen_id, grievance_id, title, new_status: status },
+        });
+        if (!emailRes.success) {
+          console.warn("Failed to send email notification:", emailRes.error);
+        }
+      } catch (err) {
+        console.error("Server function error:", err);
       }
     },
     onSuccess: () => {
@@ -213,7 +238,13 @@ function AdminPage() {
                           <Select
                             value={complaint.status}
                             onValueChange={(value) =>
-                              updateStatus.mutate({ id: complaint.id, status: value })
+                              updateStatus.mutate({
+                                id: complaint.id,
+                                status: value,
+                                citizen_id: complaint.citizen_id,
+                                grievance_id: complaint.grievance_id,
+                                title: complaint.title,
+                              })
                             }
                             disabled={updateStatus.isPending}
                           >
