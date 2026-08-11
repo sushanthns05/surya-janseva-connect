@@ -86,8 +86,13 @@ function AdminPage() {
             ? { resolved_at: new Date().toISOString() }
             : {}),
         })
-        .eq("id", id);
+        .eq("id", id)
+        .select();
+      
       if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error("Update failed. You may not have permission to perform this action.");
+      }
     },
     onSuccess: () => {
       toast.success("Status updated successfully.");
