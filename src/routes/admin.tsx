@@ -27,7 +27,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
-import { sendStatusUpdateEmail } from "@/server/email";
+import { sendStatusUpdateEmail } from "@/lib/email.functions";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({

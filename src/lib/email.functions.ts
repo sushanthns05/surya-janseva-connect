@@ -7,7 +7,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 const resend = new Resend(process.env["RESEND_API_KEY"] || "re_dummy_key_for_testing");
 
 export const sendStatusUpdateEmail = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (input: { citizen_id: string; grievance_id: string; title: string; new_status: string }) =>
       z
         .object({
