@@ -14,10 +14,13 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as GuidelinesRouteImport } from './routes/guidelines'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as SuggestionsRouteImport } from './routes/suggestions'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TrackRouteImport } from './routes/track'
 
 const IndexRoute = IndexRouteImport.update({
@@ -45,6 +48,11 @@ const ExploreRoute = ExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidelinesRoute = GuidelinesRouteImport.update({
+  id: '/guidelines',
+  path: '/guidelines',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
@@ -55,6 +63,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
@@ -63,6 +76,11 @@ const ReportRoute = ReportRouteImport.update({
 const SuggestionsRoute = SuggestionsRouteImport.update({
   id: '/suggestions',
   path: '/suggestions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrackRoute = TrackRouteImport.update({
@@ -77,10 +95,13 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
+  '/guidelines': typeof GuidelinesRoute
   '/how-it-works': typeof HowItWorksRoute
   '/notifications': typeof NotificationsRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/suggestions': typeof SuggestionsRoute
+  '/terms': typeof TermsRoute
   '/track': typeof TrackRoute
 }
 export interface FileRoutesByTo {
@@ -89,10 +110,13 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
+  '/guidelines': typeof GuidelinesRoute
   '/how-it-works': typeof HowItWorksRoute
   '/notifications': typeof NotificationsRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/suggestions': typeof SuggestionsRoute
+  '/terms': typeof TermsRoute
   '/track': typeof TrackRoute
 }
 export interface FileRoutesById {
@@ -102,10 +126,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
+  '/guidelines': typeof GuidelinesRoute
   '/how-it-works': typeof HowItWorksRoute
   '/notifications': typeof NotificationsRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/suggestions': typeof SuggestionsRoute
+  '/terms': typeof TermsRoute
   '/track': typeof TrackRoute
 }
 export interface FileRouteTypes {
@@ -116,10 +143,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/explore'
+    | '/guidelines'
     | '/how-it-works'
     | '/notifications'
+    | '/privacy'
     | '/report'
     | '/suggestions'
+    | '/terms'
     | '/track'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -128,10 +158,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/explore'
+    | '/guidelines'
     | '/how-it-works'
     | '/notifications'
+    | '/privacy'
     | '/report'
     | '/suggestions'
+    | '/terms'
     | '/track'
   id:
     | '__root__'
@@ -140,10 +173,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/explore'
+    | '/guidelines'
     | '/how-it-works'
     | '/notifications'
+    | '/privacy'
     | '/report'
     | '/suggestions'
+    | '/terms'
     | '/track'
   fileRoutesById: FileRoutesById
 }
@@ -153,10 +189,13 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   ExploreRoute: typeof ExploreRoute
+  GuidelinesRoute: typeof GuidelinesRoute
   HowItWorksRoute: typeof HowItWorksRoute
   NotificationsRoute: typeof NotificationsRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReportRoute: typeof ReportRoute
   SuggestionsRoute: typeof SuggestionsRoute
+  TermsRoute: typeof TermsRoute
   TrackRoute: typeof TrackRoute
 }
 
@@ -197,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guidelines': {
+      id: '/guidelines'
+      path: '/guidelines'
+      fullPath: '/guidelines'
+      preLoaderRoute: typeof GuidelinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/how-it-works': {
       id: '/how-it-works'
       path: '/how-it-works'
@@ -211,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/report': {
       id: '/report'
       path: '/report'
@@ -223,6 +276,13 @@ declare module '@tanstack/react-router' {
       path: '/suggestions'
       fullPath: '/suggestions'
       preLoaderRoute: typeof SuggestionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/track': {
@@ -241,22 +301,15 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   ExploreRoute: ExploreRoute,
+  GuidelinesRoute: GuidelinesRoute,
   HowItWorksRoute: HowItWorksRoute,
   NotificationsRoute: NotificationsRoute,
+  PrivacyRoute: PrivacyRoute,
   ReportRoute: ReportRoute,
   SuggestionsRoute: SuggestionsRoute,
+  TermsRoute: TermsRoute,
   TrackRoute: TrackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

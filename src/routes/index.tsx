@@ -288,7 +288,7 @@ function LandingPage() {
               <Link to="/report">{t("cta.report")}</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link to="/suggest">{t("cta.suggest")}</Link>
+              <Link to="/suggestions">{t("cta.suggest")}</Link>
             </Button>
           </div>
         </div>
