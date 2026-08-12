@@ -28,6 +28,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { sendStatusUpdateEmail } from "@/lib/email.functions";
+import { updateComplaintStatusAdmin } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -92,20 +93,12 @@ function AdminPage() {
       grievance_id: string;
       title: string;
     }) => {
-      const { data, error } = await supabase
-        .from("complaints")
-        .update({
-          status: status as Database["public"]["Enums"]["complaint_status"],
-          ...(status === "resolved" || status === "closed"
-            ? { resolved_at: new Date().toISOString() }
-            : {}),
-        })
-        .eq("id", id)
-        .select();
+      const res = await updateComplaintStatusAdmin({
+        data: { id, status },
+      });
 
-      if (error) throw error;
-      if (!data || data.length === 0) {
-        throw new Error("Update failed. You may not have permission to perform this action.");
+      if (!res.success) {
+        throw new Error(res.error || "Update failed. You may not have permission to perform this action.");
       }
 
       // Try sending email notification
