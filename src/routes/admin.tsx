@@ -98,9 +98,12 @@ function AdminPage() {
       });
 
       if (!res.success) {
-        throw new Error(res.error || "Update failed. You may not have permission to perform this action.");
+        throw new Error(
+          res.error || "Update failed. You may not have permission to perform this action.",
+        );
       }
 
+      let emailStatus = "Email not sent.";
       // Try sending email notification
       try {
         const emailRes = await sendStatusUpdateEmail({
@@ -108,13 +111,19 @@ function AdminPage() {
         });
         if (!emailRes.success) {
           console.warn("Failed to send email notification:", emailRes.error);
+          emailStatus = `Email failed: ${emailRes.error}`;
+        } else {
+          emailStatus = "Notification email sent.";
         }
       } catch (err) {
         console.error("Server function error:", err);
+        emailStatus = "Email failed: Server error.";
       }
+
+      return emailStatus;
     },
-    onSuccess: () => {
-      toast.success("Status updated successfully.");
+    onSuccess: (emailStatus) => {
+      toast.success(`Status updated successfully. ${emailStatus}`);
       queryClient.invalidateQueries({ queryKey: ["admin-complaints"] });
     },
     onError: (error: unknown) => {
