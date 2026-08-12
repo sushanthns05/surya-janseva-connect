@@ -50,7 +50,7 @@ export const sendStatusUpdateEmail = createServerFn({ method: "POST" })
 
       // 3. Send email using Resend
       const { data: emailData, error } = await resend.emails.send({
-        from: "Surya JanSeva <noreply@updates.suryajanseva.org>", // Should be replaced with verified domain
+        from: "Surya JanSeva <onboarding@resend.dev>", // Using testing domain
         to: profile.email,
         subject: `Update on your Grievance: ${grievance_id}`,
         html: `
