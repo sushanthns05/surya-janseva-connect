@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { sendPhoneOtp, verifyPhoneOtp } from "@/lib/otp.functions";
 
 const loginSchema = z.object({
   fullName: z.string().trim().max(100).optional(),
@@ -77,6 +78,7 @@ function AuthPage() {
   const [pending, setPending] = useState<PendingSignup | null>(null);
   const [otp, setOtp] = useState("");
   const [resendIn, setResendIn] = useState(0);
+  const [demoCode, setDemoCode] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -97,22 +99,17 @@ function AuthPage() {
 
   const describeError = (error: unknown, fallback: string) => {
     const message = error instanceof Error ? error.message : fallback;
-    if (/sms|phone.*(not enabled|disabled)|provider/i.test(message)) {
-      return "SMS verification is not available right now. Please try again later.";
+    if (/mobile_not_verified/i.test(message)) {
+      return "Please verify your mobile number before creating the account.";
     }
     return message;
   };
 
   const sendOtp = async (candidate: PendingSignup) => {
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: candidate.phone,
-      options: {
-        shouldCreateUser: true,
-        data: { full_name: candidate.fullName, mobile: candidate.mobile },
-      },
-    });
-    if (error) throw error;
+    const result = await sendPhoneOtp({ data: { phone: candidate.phone } });
     setResendIn(45);
+    setDemoCode(result.demoCode);
+    return result.demoCode;
   };
 
   const onSubmit = async (data: AuthFormValues) => {
@@ -136,10 +133,10 @@ function AuthPage() {
         email: data.email,
         password: data.password,
       };
-      await sendOtp(candidate);
+      const code = await sendOtp(candidate);
       setOtp("");
       setPending(candidate);
-      toast.success(`Verification code sent to ${candidate.phone}`);
+      toast.success(`Demo verification code for ${candidate.phone}: ${code}`);
     } catch (error: unknown) {
       toast.error(describeError(error, "An error occurred during authentication"));
     } finally {
@@ -151,38 +148,26 @@ function AuthPage() {
     if (!pending || otp.length !== 6) return;
     setLoading(true);
     try {
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        phone: pending.phone,
-        token: otp,
-        type: "sms",
-      });
-      if (verifyError) throw verifyError;
+      await verifyPhoneOtp({ data: { phone: pending.phone, code: otp } });
 
-      const { data: updated, error: updateError } = await supabase.auth.updateUser({
+      const { error: signUpError } = await supabase.auth.signUp({
         email: pending.email,
         password: pending.password,
-        data: { full_name: pending.fullName, mobile: pending.mobile },
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+          data: { full_name: pending.fullName, mobile: pending.mobile },
+        },
       });
-      if (updateError) throw updateError;
+      if (signUpError) throw signUpError;
 
-      if (updated.user) {
-        await supabase
-          .from("profiles")
-          .update({
-            full_name: pending.fullName,
-            mobile: pending.mobile,
-            email: pending.email,
-          })
-          .eq("id", updated.user.id);
-      }
-
-      toast.success("Mobile number verified — your account is ready.", {
-        description: "Confirm your email address from the link we sent to finish email sign-in.",
+      toast.success("Mobile verified and account created.", {
+        description: "Check your email to confirm your address, then sign in.",
       });
       setPending(null);
       setOtp("");
+      setDemoCode(null);
+      setIsLogin(true);
       reset({ fullName: "", mobile: "", email: "", password: "" });
-      navigate({ to: "/", replace: true });
     } catch (error: unknown) {
       toast.error(describeError(error, "Invalid or expired code. Please try again."));
     } finally {
@@ -194,8 +179,8 @@ function AuthPage() {
     if (!pending || resendIn > 0) return;
     setLoading(true);
     try {
-      await sendOtp(pending);
-      toast.success("A new code has been sent.");
+      const code = await sendOtp(pending);
+      toast.success(`New demo code: ${code}`);
     } catch (error: unknown) {
       toast.error(describeError(error, "Could not resend the code."));
     } finally {
@@ -216,11 +201,17 @@ function AuthPage() {
                 </div>
                 <CardTitle className="font-display text-2xl font-bold">Enter the OTP</CardTitle>
                 <CardDescription>
-                  We sent a 6-digit code to {pending.phone}. Your account is created only after this
-                  number is verified.
+                  Enter the 6-digit code for {pending.phone}. Your account is created only after
+                  this number is verified.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                {demoCode && (
+                  <div className="rounded-md border border-dashed border-primary/40 bg-primary/5 p-3 text-center text-sm">
+                    <span className="text-muted-foreground">Demo mode — SMS not configured. </span>
+                    <span className="font-semibold tracking-widest text-primary">{demoCode}</span>
+                  </div>
+                )}
                 <div className="flex justify-center">
                   <InputOTP maxLength={6} value={otp} onChange={setOtp}>
                     <InputOTPGroup>
@@ -245,6 +236,7 @@ function AuthPage() {
                     onClick={() => {
                       setPending(null);
                       setOtp("");
+                      setDemoCode(null);
                     }}
                   >
                     <ArrowLeft className="h-4 w-4" /> Change details
